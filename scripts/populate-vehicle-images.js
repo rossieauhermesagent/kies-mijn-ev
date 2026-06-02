@@ -15,12 +15,20 @@ if (!SUPABASE_URL || !SERVICE_KEY) {
 
 const supabase = createClient(SUPABASE_URL, SERVICE_KEY, { auth: { persistSession: false } });
 
+function normaliseImageUrl(url) {
+  if (!url) return url;
+  if (url.includes("/crop/")) return url.replace(/\/crop\/\d+x\d+\//, "/img/");
+  return url;
+}
+
 function imageCandidates(vehicle) {
   const query = encodeURIComponent(`${vehicle.make} ${vehicle.model} ${vehicle.variant || ""} electric car`.replace(/\s+/g, " ").trim());
   const urls = [];
-  if (vehicle.image_url) urls.push(vehicle.image_url);
+  for (const url of [...(vehicle.image_urls || []), vehicle.image_url]) {
+    if (url) urls.push(normaliseImageUrl(url));
+  }
   for (let i = 1; i <= FALLBACK_COUNT; i += 1) {
-    urls.push(`https://source.unsplash.com/1200x800/?${query}&sig=${vehicle.external_id}-${i}`);
+    urls.push(`https://source.unsplash.com/1600x1000/?${query}&sig=${vehicle.external_id}-${i}`);
   }
   return [...new Set(urls)].slice(0, 5);
 }

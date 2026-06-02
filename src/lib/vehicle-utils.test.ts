@@ -81,6 +81,15 @@ describe("vehicle utilities", () => {
     assert.equal(getVehicleImages(car).length, 5);
   });
 
+  it("upgrades EV Database crop image URLs to higher resolution originals", () => {
+    const car = {
+      ...baseVehicle,
+      image_url: "https://ev-database.org/img/auto/Tesla_Model_Y/Tesla_Model_Y-01.jpg",
+      image_urls: ["https://ev-database.org/crop/480x320/auto/Tesla_Model_Y/Tesla_Model_Y-01.jpg"],
+    };
+    assert.equal(getVehicleImages(car)[0], "https://ev-database.org/img/auto/Tesla_Model_Y/Tesla_Model_Y-01.jpg");
+  });
+
   it("matches buyer intent presets", () => {
     assert.equal(matchesBuyerPreset(baseVehicle, "family"), true);
     assert.equal(matchesBuyerPreset(baseVehicle, "towing"), true);

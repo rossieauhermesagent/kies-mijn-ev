@@ -54,9 +54,13 @@ export default async function VehiclePage({ params }: PageProps) {
       </section>
 
       <section className={styles.gallery} aria-label={`Afbeeldingen van ${vehicle.full_name}`}>
-        {images.slice(0, 5).map((image, index) => (
-          <img src={image} alt={`${vehicle.full_name} afbeelding ${index + 1}`} key={image} />
-        ))}
+        {images.length > 0 ? images.slice(0, 5).map((image, index) => (
+          <figure className={styles.galleryImage} key={image}>
+            <img src={image} alt={`${vehicle.full_name} afbeelding ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
+          </figure>
+        )) : (
+          <div className={styles.galleryFallback}>Afbeeldingen nog niet beschikbaar</div>
+        )}
       </section>
 
       <section className={styles.explainerGrid}>
