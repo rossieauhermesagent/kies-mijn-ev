@@ -10,6 +10,7 @@ export type EVVehicle = {
   variant: string | null;
   full_name: string;
   image_url: string | null;
+  image_urls?: string[] | null;
   price_eur: number | null;
   lease_price_eur_month: number | null;
   battery_usable_kwh: number | null;

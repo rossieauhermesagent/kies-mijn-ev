@@ -7,8 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "node --test --import tsx src/**/*.test.ts",
     "import:ev": "node scripts/import-ev-overview.js",
-    "import:ev:details": "node scripts/import-ev-database.js"
+    "import:ev:details": "node scripts/import-ev-database.js",
+    "images:populate": "node scripts/populate-vehicle-images.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.2",
@@ -25,6 +27,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.7",
+    "tsx": "^4.22.4",
     "typescript": "^5"
   }
 }
