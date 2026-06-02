@@ -28,10 +28,16 @@ SUPABASE_SERVICE_ROLE_KEY=...
 
 3. Create the database table by running `supabase/schema.sql` in the Supabase SQL Editor.
 
-4. Import EV data:
+4. Import EV data from the overview page:
 
 ```bash
 npm run import:ev
+```
+
+For slower detail-page enrichment, use:
+
+```bash
+npm run import:ev:details
 ```
 
 5. Start the site:
