@@ -6,7 +6,6 @@ require("dotenv").config();
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const FALLBACK_COUNT = 5;
 
 if (!SUPABASE_URL || !SERVICE_KEY) {
   console.error("Missing NEXT_PUBLIC_SUPABASE_URL/SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
@@ -22,15 +21,15 @@ function normaliseImageUrl(url) {
 }
 
 function imageCandidates(vehicle) {
-  const query = encodeURIComponent(`${vehicle.make} ${vehicle.model} ${vehicle.variant || ""} electric car`.replace(/\s+/g, " ").trim());
+  const seen = new Set();
   const urls = [];
   for (const url of [...(vehicle.image_urls || []), vehicle.image_url]) {
-    if (url) urls.push(normaliseImageUrl(url));
+    if (url && !url.includes("source.unsplash.com") && !seen.has(url)) {
+      seen.add(url);
+      urls.push(normaliseImageUrl(url));
+    }
   }
-  for (let i = 1; i <= FALLBACK_COUNT; i += 1) {
-    urls.push(`https://source.unsplash.com/1600x1000/?${query}&sig=${vehicle.external_id}-${i}`);
-  }
-  return [...new Set(urls)].slice(0, 5);
+  return urls;
 }
 
 async function main() {

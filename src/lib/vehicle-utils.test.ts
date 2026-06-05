@@ -68,17 +68,18 @@ describe("vehicle utilities", () => {
     assert.equal(normaliseAvailability("discontinued"), "discontinued");
   });
 
-  it("returns at least five stable image candidates for every vehicle", () => {
+  it("returns all unique real image URLs for a vehicle", () => {
     const images = getVehicleImages(baseVehicle);
-    assert.ok(images.length >= 5);
     assert.equal(images[0], "https://example.com/one.jpg");
+    assert.equal(images[1], "https://example.com/two.jpg");
+    assert.equal(images[2], "https://example.com/main.jpg");
     assert.equal(new Set(images).size, images.length);
   });
 
-  it("uses a deterministic fallback as primary image when imported images are missing", () => {
+  it("returns no images when all stored URLs are missing", () => {
     const car = { ...baseVehicle, image_url: null, image_urls: [] };
-    assert.ok(getPrimaryImage(car).includes("source.unsplash.com"));
-    assert.equal(getVehicleImages(car).length, 5);
+    assert.equal(getPrimaryImage(car), undefined);
+    assert.equal(getVehicleImages(car).length, 0);
   });
 
   it("upgrades EV Database crop image URLs to higher resolution originals", () => {

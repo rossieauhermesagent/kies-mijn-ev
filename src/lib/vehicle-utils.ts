@@ -43,16 +43,11 @@ function normaliseImageUrl(url: string) {
   return url;
 }
 
-function fallbackImages(vehicle: Pick<EVVehicle, "make" | "model" | "variant" | "full_name">) {
-  const query = encodeURIComponent(`${vehicle.make} ${vehicle.model} ${vehicle.variant ?? ""} electric car`.replace(/\s+/g, " ").trim());
-  return Array.from({ length: 5 }, (_, index) => `https://source.unsplash.com/1600x1000/?${query}&sig=${index + 1}`);
-}
-
 export function getVehicleImages(vehicle: Pick<EVVehicle, "image_url" | "image_urls" | "make" | "model" | "variant" | "full_name">) {
   const imported = [...(vehicle.image_urls ?? []), vehicle.image_url]
-    .filter(Boolean)
-    .map((url) => normaliseImageUrl(url as string));
-  return [...new Set([...imported, ...fallbackImages(vehicle)])].slice(0, Math.max(5, imported.length));
+    .filter((url): url is string => Boolean(url) && !url!.includes("source.unsplash.com"))
+    .map((url) => normaliseImageUrl(url));
+  return [...new Set(imported)];
 }
 
 export function getPrimaryImage(vehicle: Pick<EVVehicle, "image_url" | "image_urls" | "make" | "model" | "variant" | "full_name">) {
