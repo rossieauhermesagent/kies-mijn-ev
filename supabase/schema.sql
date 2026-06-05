@@ -15,6 +15,7 @@ create table if not exists public.ev_vehicles (
   variant text,
   full_name text not null,
   image_url text,
+  image_urls text[] not null default '{}'::text[],
   price_eur integer,
   lease_price_eur_month integer,
   battery_usable_kwh numeric,
